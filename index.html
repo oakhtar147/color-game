@@ -5,15 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Color Game</title>
     <link rel="stylesheet" href="app.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
 </head>
 <body>
-    <h1>The Great Color Game</h1>
+    <h1>The Great
+        <br>
+        <span id="winColor">RGB(<span id="red">R</span>, <span id="green">G</span>, <span id="blue">B</span>)</span>
+        <br>
+        Color Game
+    </h1>
 
-    <div>
+    <div class="stripe">
         <button id="option"></button>
-        <span id="status"></span>
+        <span id="status">Try Again!</span>
         <button id="easy">Easy</button>
-        <button id="hard">Hard</button>
+        <button id="hard" class="selected">Hard</button>
     </div>
     
     <div id="container">
