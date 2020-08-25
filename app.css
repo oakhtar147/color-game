@@ -52,6 +52,12 @@ button {
     text-transform: uppercase;
     background: white;
     letter-spacing: 1px ;
+    height: 100%;
+}
+
+button:hover {
+    background: #6cc5f8;
+    color: white;
 }
 
 #status {
@@ -64,7 +70,6 @@ button {
 .selected {
     background: #6cc5f8;
     color: white;
-    height: 100%;
 }
 
 .stripe {
