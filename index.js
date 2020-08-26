@@ -63,23 +63,10 @@ function getRandomInt(min, max) {
 }   
 
 function resetColors(){
-    if (numSquares === 6){
-        h1.style.backgroundColor = h1Color;
-        easy.removeAttribute("style");
-        hard.removeAttribute("style");
-        option.removeAttribute("style");
-        easy.classList.remove("selected");
-        hard.classList.add("selected");
-        status.style.color = "white";
-    } else if (numSquares === 3){
-        easy.removeAttribute("style");
-        hard.removeAttribute("style");
-        option.removeAttribute("style");
-        h1.style.backgroundColor = h1Color; 
-        easy.classList.add("selected");
-        hard.classList.remove("selected");
-        status.style.color = "white";
-    }
+ // this function will reset the button and h1 styles when a button is clicked after winning the game
+    option.style.color = "#6cc5f8"  // the color i want but its overriden by the color i give it in boxEvents method
+    h1.style.backgroundColor = "#6cc5f8"
+    
 } 
 
 function boxEvents(number){
@@ -104,17 +91,6 @@ function boxEvents(number){
     }    
 }
 
-function hoverEffect(element){
-    element.onmouseover = function(){
-        this.style.color = "white";
-        this.style.backgroundColor = winColor;
-    }
-    element.onmouseleave = function(){
-        this.style.backgroundColor = "white";
-        this.style.color = winColor;
-    }
-
-}
 
 option.textContent = "New Colors";
 option.addEventListener("click", function(){
@@ -166,14 +142,24 @@ hard.addEventListener("click", function(){
 
 // events
 
+function winHoverEffect(element){
+    element.onmouseover = function(){
+        element.style.backgroundColor = winColor;
+        element.style.color = "white";
+    }
+    element.onmouseleave = function(){
+        element.style.color = winColor;
+        element.style.backgroundColor = "white";
+    }
+}
+
 let losingColors = [];
 
 for(let i=0; i<boxes.length; i++){
     boxes[i].addEventListener("click", function(){
         if (this.style.backgroundColor === winColor){
             boxEvents(numSquares);
-            hoverEffect(option);
-            hoverEffect(easy);
+            winHoverEffect(option);
         }else{
             this.style.backgroundColor = "#232323";
             status.textContent = "Try Again!"
