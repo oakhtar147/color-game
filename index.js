@@ -5,9 +5,13 @@ const status = document.getElementById("status");
 const option = document.getElementById("option");
 const easy = document.querySelector("#easy");
 const hard = document.querySelector("#hard");
-
+const theme = document.querySelector("#theme");
+const body = document.querySelector("body");
+let themeCount = 0; // this counter will let us know if we are in light or dark mode.
 
 const h1Color = "#6cc5f8";
+const darkTheme = "#232323";
+const lightTheme = "#e0dddd";
 
 
 var colors = generateRandomColors(numSquares); // initializes random color boxes based on random rgb values
@@ -62,45 +66,34 @@ function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min); //The maximum and the minimum are inclusive
 }   
 
-function resetColors(){
- // this function will reset the button and h1 styles when a button is clicked after winning the game
-    option.style.color = "#6cc5f8"  // the color i want but its overriden by the color i give it in boxEvents method
-    h1.style.backgroundColor = "#6cc5f8"
-    
-} 
+
+function clearBoxes(){
+    if (themeCount % 2 === 0){
+        boxes.forEach(function(box){ !losingColors.includes(box) ? box.style.backgroundColor = winColor : box.style.backgroundColor = darkTheme});
+    } else {
+        boxes.forEach(function(box){ !losingColors.includes(box) ? box.style.backgroundColor = winColor : box.style.backgroundColor = lightTheme});
+    }
+}
 
 function boxEvents(number){
-    if (number === 6){
-        boxes.forEach(function(box){ !losingColors.includes(box) ? box.style.backgroundColor = winColor : box.style.backgroundColor = "#232323"});
-        h1.style.background = winColor;
-        status.textContent = " Correct! ";
-        option.textContent = "Play Again?";
-        status.style.color = winColor;
-        option.style.color = winColor;
-        easy.style.color = winColor;
-        hard.style.backgroundColor = winColor; 
-    } else if (number === 3){
-        boxes.forEach(function(box){ !losingColors.includes(box) ? box.style.backgroundColor = winColor : box.style.backgroundColor = "#232323"});
-        h1.style.background = winColor;
-        status.textContent = " Correct! ";
-        option.textContent = "Play Again?";
-        status.style.color = winColor;
-        option.style.color = winColor;
-        hard.style.color = winColor;
-        easy.style.backgroundColor = winColor; 
-    }    
+    clearBoxes();
+    h1.style.backgroundColor = winColor;
+    status.textContent = " Correct! ";
+    option.textContent = "Play Again?";       
 }
 
 
 option.textContent = "New Colors";
 option.addEventListener("click", function(){
-    option.textContent = "New Colors";  
+    option.textContent = "New Colors";
+    status.textContent = "Guess the color";
+    status.style.color = h1Color; 
+    h1.style.backgroundColor = h1Color;
     colors = generateRandomColors(6);
     winColor = colors[getRandomInt(0, colors.length-1)];
     updateBoxColors(); 
     [r, g, b] = getRGBValues();
     updateH1Tag();
-    resetColors();
     losingColors = []; // once  we click the button we want no colors in our losingColors array       
 })
 
@@ -111,16 +104,16 @@ easy.addEventListener("click", function(){
     easy.classList.add("selected");
     hard.classList.remove("selected");
     h1.style.backgroundColor = h1Color;
-    status.textContent = "Try Again!";
+    status.textContent = "Guess the color";
     option.textContent = "New Colors";
-    status.style.color = "white";   
+    status.style.color = h1Color;   
     numSquares = 3;
     colors = generateRandomColors(numSquares);
     winColor = colors[getRandomInt(0, 2)];
     [r, g, b] = getRGBValues();
     updateH1Tag();
     updateBoxColors();
-    resetColors();
+    losingColors = [];
 })
 
 hard.addEventListener("click", function(){
@@ -128,42 +121,49 @@ hard.addEventListener("click", function(){
     easy.classList.remove("selected");
     h1.style.backgroundColor = h1Color;
     option.textContent = "New Colors";
-    status.textContent = "Try Again!";
-    status.style.color = "white";       
+    status.textContent = "Guess the color";
+    status.style.color = h1Color;       
     numSquares = 6;
     colors = generateRandomColors(numSquares);
     winColor = colors[getRandomInt(0, 5)];
     [r, g, b] = getRGBValues();
     updateH1Tag();
     updateBoxColors();
-    resetColors();
-
+    losingColors = [];
 })
 
-// events
-
-function winHoverEffect(element){
-    element.onmouseover = function(){
-        element.style.backgroundColor = winColor;
-        element.style.color = "white";
-    }
-    element.onmouseleave = function(){
-        element.style.color = winColor;
-        element.style.backgroundColor = "white";
-    }
-}
+theme.addEventListener("click", function(){
+    themeCount++;
+    if (themeCount % 2 === 0){
+        theme.textContent = "Light Theme";
+        boxes.forEach(function(box){
+            if(losingColors.includes(box)){
+                box.style.backgroundColor = darkTheme;
+            } else {}
+        })
+    } else {
+        theme.textContent = "Dark Theme";
+        boxes.forEach(function(box){
+            if(losingColors.includes(box)){
+                box.style.backgroundColor = lightTheme;
+            } else {}
+        })
+    }body.classList.toggle("theme");
+})
 
 let losingColors = [];
 
-for(let i=0; i<boxes.length; i++){
-    boxes[i].addEventListener("click", function(){
+for(let j=0; j<boxes.length; j++){
+    boxes[j].addEventListener("click", function(){
         if (this.style.backgroundColor === winColor){
             boxEvents(numSquares);
-            winHoverEffect(option);
         }else{
-            this.style.backgroundColor = "#232323";
+            if (themeCount % 2 === 0){
+                this.style.backgroundColor = darkTheme;
+            } else {
+                this.style.backgroundColor = lightTheme;
+            }
             status.textContent = "Try Again!"
             status.style.color = h1Color;
             losingColors.push(this);
-    
 }})};
